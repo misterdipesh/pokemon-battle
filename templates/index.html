@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pokémon Battle</title>
+</head>
+<body>
+    <h1>Pokémon 1v1 Battle Predictor</h1>
+    <form method="post">
+        <label>Mode:</label><br>
+        <input type="radio" name="mode" value="vs_computer" checked> Vs Computer<br>
+        <input type="radio" name="mode" value="multi"> Multiplayer<br><br>
+
+        <label>Player 1 Pokémon:</label><br>
+        <select name="p1">
+            {% for name in names %}
+            <option value="{{ name }}">{{ name }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <div id="p2_select" style="display:none;">
+            <label>Player 2 Pokémon:</label><br>
+            <select name="p2">
+                {% for name in names %}
+                <option value="{{ name }}">{{ name }}</option>
+                {% endfor %}
+            </select><br><br>
+        </div>
+
+        <input type="submit" value="Battle!">
+    </form>
+
+    {% if result %}
+    <h2>{{ result }}</h2>
+    {% endif %}
+
+    <script>
+        const modeInputs = document.querySelectorAll('input[name="mode"]');
+        const p2Div = document.getElementById("p2_select");
+        modeInputs.forEach(input => {
+            input.addEventListener('change', function () {
+                if (this.value === "multi") {
+                    p2Div.style.display = "block";
+                } else {
+                    p2Div.style.display = "none";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
