@@ -2,6 +2,55 @@
 <html>
 <head>
     <title>Pokémon Battle</title>
+    <link rel="icon" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #f5f7fa, #c3cfe2);
+            text-align: center;
+            padding: 50px;
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        select, input[type="submit"] {
+            padding: 10px;
+            margin: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .winner {
+            font-size: 24px;
+            color: green;
+            animation: pop 1s ease-out;
+        }
+        .loser {
+            font-size: 24px;
+            color: red;
+            animation: shake 0.5s ease-in-out;
+        }
+        .emoji {
+            font-size: 50px;
+            margin-top: 10px;
+            animation: bounce 1.5s infinite;
+        }
+        @keyframes pop {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
 </head>
 <body>
     <h1>Pokémon 1v1 Battle Predictor</h1>
@@ -30,7 +79,21 @@
     </form>
 
     {% if result %}
-    <h2>{{ result }}</h2>
+        {% if mode == 'multi' %}
+            <div class="winner">
+                <h2>🎉 {{ p1 }} wins the battle! 🥳</h2>
+                <div class="emoji">🎉🥳✨</div>
+            </div>
+            <div class="loser">
+                <h2>{{ p2 }} loses. Better luck next time! 😢</h2>
+                <div class="emoji">😢💔</div>
+            </div>
+        {% else %}
+            <div class="{{ 'winner' if 'Winner' in result else 'loser' }}">
+                <h2>{{ result }}</h2>
+                <div class="emoji">{{ '🎉🥳✨' if 'Winner' in result else '😢💔' }}</div>
+            </div>
+        {% endif %}
     {% endif %}
 
     <script>
@@ -38,11 +101,7 @@
         const p2Div = document.getElementById("p2_select");
         modeInputs.forEach(input => {
             input.addEventListener('change', function () {
-                if (this.value === "multi") {
-                    p2Div.style.display = "block";
-                } else {
-                    p2Div.style.display = "none";
-                }
+                p2Div.style.display = this.value === "multi" ? "block" : "none";
             });
         });
     </script>
